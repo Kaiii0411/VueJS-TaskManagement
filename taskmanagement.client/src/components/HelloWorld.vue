@@ -1,6 +1,13 @@
 <template>
     <div class="weather-component">
-        <h1>Weather forecast</h1>
+        <div v-if="accountState.isAuthenticated">
+            <h1>Welcome, {{ accountState.user?.name }}!</h1>
+            <button @click="handleLogout">Log Out</button>
+        </div>
+        <div v-else>
+            <h1>Weather forecast</h1>
+            <button @click="handleLogin">Log In</button>
+        </div>
         <p>This component demonstrates fetching data from the server.</p>
 
         <div v-if="loading" class="loading">
@@ -31,18 +38,25 @@
 </template>
 
 <script lang="js">
+    import { msalService } from '../config/msalService'
+    import { state } from '../config/msalConfig'
+
     import { defineComponent } from 'vue';
+    import axios from 'axios';
 
     export default defineComponent({
         data() {
             return {
                 loading: false,
-                post: null
+                post: null,
+                accountState: state,
+                msal: msalService()
             };
         },
         created() {
             // fetch the data when the view is created and the data is
             // already being observed
+            this.initialize();
             this.fetchData();
         },
         watch: {
@@ -50,14 +64,38 @@
             '$route': 'fetchData'
         },
         methods: {
+            async handleLogin() {
+                try {
+                    await this.msal.login()
+                } catch (error) {
+                    console.error('Login error:', error)
+                }
+            },
+
+            handleLogout() {
+                try {
+                    this.msal.logout()
+                } catch (error) {
+                    console.error('Logout error:', error)
+                }
+            },
+
+            async initialize() {
+                try {
+                    await this.msal.initialize()
+                    await this.msal.handleRedirect() 
+                } catch (error) {
+                    console.error('Initialization error:', error)
+                }
+            },
+
             fetchData() {
                 this.post = null;
                 this.loading = true;
 
-                fetch('weatherforecast')
-                    .then(r => r.json())
-                    .then(json => {
-                        this.post = json;
+                axios.get('weatherforecast')
+                    .then(response => {
+                        this.post = response.data;
                         this.loading = false;
                         return;
                     });
