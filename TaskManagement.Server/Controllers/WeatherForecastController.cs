@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TaskManagement.Server.Controllers
@@ -18,6 +19,7 @@ namespace TaskManagement.Server.Controllers
             _logger = logger;
         }
 
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

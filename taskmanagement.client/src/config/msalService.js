@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { msalInstance, state } from './msalConfig'
+import store from '../store'
 
 export function msalService() {
     const isAuthenticated = ref(false)
@@ -46,6 +47,8 @@ export function msalService() {
             if (response) {
                 state.isAuthenticated = response.account !== null
                 state.user = response.account
+                let tokenStr = response.accessToken
+                await store.dispatch('user/login', { userName: state.user.name, token: tokenStr })
             } else {
                 state.isAuthenticated = msalInstance.getAllAccounts().length > 0
                 state.user = msalInstance.getAllAccounts()[0] || null

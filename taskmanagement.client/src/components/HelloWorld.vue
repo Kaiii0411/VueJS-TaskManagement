@@ -2,6 +2,7 @@
     <div class="weather-component">
         <div v-if="accountState.isAuthenticated">
             <h1>Welcome, {{ accountState.user?.name }}!</h1>
+            <button @click="fetchData">Fetch Data</button>
             <button @click="handleLogout">Log Out</button>
         </div>
         <div v-else>
@@ -57,7 +58,7 @@
             // fetch the data when the view is created and the data is
             // already being observed
             this.initialize();
-            this.fetchData();
+            //this.fetchData();
         },
         watch: {
             // call again the method if the route changes
@@ -90,15 +91,34 @@
             },
 
             fetchData() {
-                this.post = null;
-                this.loading = true;
+                try {
+                    this.post = null;
+                    this.loading = true;
 
-                axios.get('weatherforecast')
+                    // Extract the token from Vuex store
+                    //const tokenResponse = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTmdoaWEgTmd1eWVuIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTcyMjE3MjI5NiwiaXNzIjoiaHR0cHM6Ly93d3cuc2Nob29sb3V0Zml0dGVycy5jb20vIiwiYXVkIjoiaHR0cHM6Ly93d3cuc2Nob29sb3V0Zml0dGVycy5jb20vIn0.wF62utM_H4IyZo4GLnjPs5g6Xga8hvm7WSBahsIxIAE';
+                    const tokenResponse = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTmdoaWEgTmd1eWVuIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE3MjIxNzIxNDcsImlzcyI6Imh0dHBzOi8vd3d3LnNjaG9vbG91dGZpdHRlcnMuY29tLyIsImF1ZCI6Imh0dHBzOi8vd3d3LnNjaG9vbG91dGZpdHRlcnMuY29tLyJ9.YqQKRVfsjFEGDC86RnOdiRMsgkTMiXMBCIE68YStbFU';
+                    console.log('Token:', tokenResponse);
+
+                    // Make the HTTP GET request
+                    axios.get('weatherforecast', {
+                        headers: {
+                            'Authorization': `Bearer ${tokenResponse}`,
+                            'Content-Type': 'application/json'
+                        }
+                    })
                     .then(response => {
                         this.post = response.data;
                         this.loading = false;
-                        return;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        this.loading = false; // Ensure loading state is reset in case of an error
                     });
+                } catch (error) {
+                    console.error('Unexpected error:', error);
+                    this.loading = false; // Ensure loading state is reset in case of an unexpected error
+                }
             }
         },
     });
