@@ -19,7 +19,7 @@ namespace TaskManagement.Server.Controllers
             _logger = logger;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
+        //[Authorize(Policy = "RequireAdminRole")]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
