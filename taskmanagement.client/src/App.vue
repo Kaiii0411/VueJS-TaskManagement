@@ -1,47 +1,59 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+  import { useRouter, RouterView } from 'vue-router'
+  const router = useRouter()
+
+  const navigateToTaskTracking = () => {
+    router.push({ name: 'tasktrackingtool' })
+  }
+
+  const navigateToTaskTrackingReport = () => {
+    router.push({ name: 'tasktrackingreport' })
+  }
+
+  const navigateToTeamReportByWeek = () => {
+    router.push({ name: 'teamreportbyweek' })
+  }
+
+  const navigateToTeamReportByMonth = () => {
+    router.push({ name: 'teamreportbymonth' })
+  }
+
+  const navigateToTeamReportByUser = () => {
+    router.push({ name: 'teamreportbyuser' })
+  }
+
+  const navigateToTaskManagement = () => {
+    router.push({ name: 'taskmanagement' })
+  }
+
+  const navigateToUserManagement = () => {
+    router.push({ name: 'usermanagement' })
+  }
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <nav>
+    <el-header>
+      <el-menu
+        class="el-menu-demo"
+        mode="horizontal"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b">
+        <el-menu-item index="1" @click="navigateToTaskTracking()">Start Working</el-menu-item>
+        <el-menu-item index="2" @click="navigateToTaskTrackingReport()">My Dashboard</el-menu-item>
+        <el-sub-menu index="3">
+          <template #title>Team Report</template>
+          <el-menu-item index="3-1" @click="navigateToTeamReportByWeek()">By Week</el-menu-item>
+          <el-menu-item index="3-2" @click="navigateToTeamReportByMonth()">By Month</el-menu-item>
+          <el-menu-item index="3-3" @click="navigateToTeamReportByUser()">By User</el-menu-item>
+        </el-sub-menu>
+        <el-menu-item index="4" @click="navigateToTaskManagement()">Task Management</el-menu-item>
+        <el-menu-item index="5" @click="navigateToUserManagement()">User Management</el-menu-item>
+      </el-menu>
+    </el-header>
+  </nav>
+  <el-main>
+    <RouterView />
+  </el-main>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
