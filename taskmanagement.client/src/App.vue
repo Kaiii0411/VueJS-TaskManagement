@@ -13,7 +13,7 @@
         ...mapGetters('user', ['userInfo']),
 
         userRole() {
-          return this.userInfo.role;
+          return this.userInfo.roleName;
         }
       },
 
@@ -39,11 +39,10 @@
         navigateToUserManagement() {
             this.router.push({ name: 'usermanagement' })
         },
-
         showItem(item) {
           const rolePermissions = {
             dashboard: ['User', 'Admin', 'Manager'],
-            admin: ['Admin'],
+            management: ['Admin'],
             reports: ['Manager', 'Admin']
           };
 
@@ -73,8 +72,8 @@
           <el-menu-item index="3-2" @click="navigateToTeamReportByMonth()">By Month</el-menu-item>
           <el-menu-item index="3-3" @click="navigateToTeamReportByUser()">By User</el-menu-item>
         </el-sub-menu>
-        <el-menu-item v-if="showItem('admin')" index="4" @click="navigateToTaskManagement()">Task Management</el-menu-item>
-        <el-menu-item v-if="showItem('admin')" index="5" @click="navigateToUserManagement()">User Management</el-menu-item>
+        <el-menu-item v-if="showItem('management')" index="4" @click="navigateToTaskManagement()">Task Management</el-menu-item>
+        <el-menu-item v-if="showItem('management')" index="5" @click="navigateToUserManagement()">User Management</el-menu-item>
       </el-menu>
     </el-header>
   </nav>
