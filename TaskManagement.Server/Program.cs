@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TaskManagement.Core.Interfaces;
+using TaskManagement.Data.Context;
+using TaskManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<DapperContext>();
+builder.Services.AddTransient<IDapperService, DapperService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

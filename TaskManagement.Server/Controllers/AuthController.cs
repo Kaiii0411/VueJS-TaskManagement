@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TaskManagement.Core.Interfaces;
+using TaskManagement.Core.Models;
 
 namespace TaskManagement.Server.Controllers
 {
@@ -12,25 +14,36 @@ namespace TaskManagement.Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController
+        (
+            IConfiguration configuration,
+            IUserService userService
+        )
         {
             _configuration = configuration;
+            _userService = userService;
         }
 
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var token = GenerateJwtToken();
+            var token = GenerateJwtToken("nghia.nguyen@schooloutfitters.com");
             return Ok(new { token });
         }
 
-        private string GenerateJwtToken()
+        private async Task<string> GenerateJwtToken(string email)
         {
+            User? user = await _userService.GetByMail(email);
+
+            if(user == null)
+                return string.Empty;
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, "Nghia Nguyen"),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Role, user.RoleName)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));

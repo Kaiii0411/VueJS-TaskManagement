@@ -23,6 +23,9 @@
     <ProjectReference Include="..\taskmanagement.client\taskmanagement.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\TaskManagement.Core\TaskManagement.Core.csproj" />
+    <ProjectReference Include="..\TaskManagement.Data\TaskManagement.Data.csproj" />
+    <ProjectReference Include="..\TaskManagement.Services\TaskManagement.Services.csproj" />
   </ItemGroup>
 
 </Project>
