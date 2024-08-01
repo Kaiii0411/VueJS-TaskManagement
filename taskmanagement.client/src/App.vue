@@ -2,11 +2,16 @@
     import { useRouter, RouterView } from 'vue-router'
     import { mapGetters } from 'vuex';
     import { defineComponent } from 'vue';
+    import { msalService } from './config/msalService'
     export default defineComponent({
       data() {
         return {
             router: useRouter()
         };
+      },
+
+      mounted() {
+        this.initializeMsal();
       },
 
       computed: {
@@ -18,6 +23,12 @@
       },
 
       methods: {
+        async initializeMsal() {
+          const { initialize, handleRedirect } = msalService();
+          await initialize();
+          await handleRedirect();
+        },
+
         navigateToTaskTracking() {
             this.router.push({ name: 'tasktrackingtool' })
         },

@@ -143,7 +143,7 @@
   
   <script>
   import { defineComponent } from 'vue'
-  import ScriptContent from './user-management.js'
+  import ScriptContent from './UserManagement.js'
   
   export default defineComponent({
     extends: ScriptContent,

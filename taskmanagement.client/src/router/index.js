@@ -6,6 +6,7 @@ import TaskManagement from '../components/Management/TaskManagement/TaskManageme
 import TeamReportByWeek from '../components/Reports/TeamReportByWeek/TeamReportByWeek.vue'
 import TeamReportByMonth from '../components/Reports/TeamReportByMonth/TeamReportByMonth.vue'
 import TeamReportByUser from '../components/Reports/TeamReportByUser/TeamReportByUser.vue'
+import { authGuard } from '@/guards/authGuard'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,37 +14,44 @@ const router = createRouter({
       {
         path: '/tasktrackingtool',
         name: 'tasktrackingtool',
-        component: TaskTrackingList
+        component: TaskTrackingList,
+        beforeEnter: authGuard
       },
       {
         path: '/tasktrackingreport',
         name: 'tasktrackingreport',
-        component: TaskTrackingReport
+        component: TaskTrackingReport,
+        beforeEnter: authGuard
       },
       {
         path: '/report/teambyweek',
         name: 'teamreportbyweek',
-        component: TeamReportByWeek
+        component: TeamReportByWeek,
+        beforeEnter: authGuard
       },
       {
         path: '/report/teambymonth',
         name: 'teamreportbymonth',
-        component: TeamReportByMonth
+        component: TeamReportByMonth,
+        beforeEnter: authGuard
       },
       {
         path: '/report/teambyuser',
         name: 'teamreportbyuser',
-        component: TeamReportByUser
+        component: TeamReportByUser,
+        beforeEnter: authGuard
       },
       {
         path: '/admin/usermanagement',
         name: 'usermanagement',
-        component: UserManagement
+        component: UserManagement,
+        beforeEnter: authGuard
       },
       {
         path: '/admin/taskmanagement',
         name: 'taskmanagement',
-        component: TaskManagement
+        component: TaskManagement,
+        beforeEnter: authGuard
       },
     ]
   })
